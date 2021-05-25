@@ -195,23 +195,38 @@ const createTable = (array, title) => {
 }
 
 const getMaxMinHour = (array) => {
-    let maxHour = new Date().setHours(0);
-    let minHour = new Date().setHours(23);
+
+    let date1 = new Date();
+    let date2 = new Date();
+    date1.setHours(0);
+    date2.setHours(23)
+    let maxHour = date1.getTime();
+    let minHour = date2.getTime();
     let indexMax = 0;
     let indexMin = 0;
     array.forEach((element, index) => {
-        let hour = new Date().setHours(parseInt(element.hora));
+        let date = new Date();
+        let hoursMinutes = element.hora.split(':');
+        let hours = hoursMinutes[0];
+        let minutes = hoursMinutes[1];
+
+        date.setHours(hours);
+        date.setMinutes(minutes);
+        hour = date.getTime();
+
         if (maxHour < hour) {
             maxHour = hour;
             indexMax = index
         }
-        if (maxHour > hour) {
-            maxHour = hour;
+        if (minHour > hour) {
+            minHour = hour;
             indexMin = index
         }
+
     });
     return ([array[indexMin], array[indexMax]])
 }
+
 
 createCard(getMaxMinHour(radiologia), 'Radiología');
 createCard(getMaxMinHour(traumatologia), 'Traumatología');
